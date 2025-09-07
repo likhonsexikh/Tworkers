@@ -63,9 +63,8 @@ def run_inference(prompt: str) -> str:
     """
     log_action(f"Running inference for prompt: '{prompt}'")
     try:
-        # This is a placeholder for the actual inference call.
-        # response = TworkersRootAgent.infer(prompt)
-        response = f"This is a mocked response for the prompt: '{prompt}'"
+        # This is the actual inference call.
+        response = TworkersRootAgent.infer(prompt)
         log_action(f"Agent Response: {response}")
         return response
     except Exception as e:

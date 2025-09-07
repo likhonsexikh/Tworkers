@@ -1,31 +1,57 @@
 #!/bin/bash
 
-echo "Starting Tworkers setup..."
+# Tworkers Agent Setup for Termux with Proot-Distro Sandbox
 
-# Update and upgrade Termux packages
-echo "Updating and upgrading packages..."
-pkg update && pkg upgrade -y
+echo "🚀 Starting Tworkers Setup for Termux..."
+echo "This will install an Ubuntu environment via proot-distro for sandboxing."
 
-# Install essential packages
-echo "Installing essential packages..."
-pkg install git python nodejs nano curl wget -y
+# === Part 1: Setup Base Termux Environment ===
+echo "[1/4] Updating Termux packages and installing proot-distro..."
+pkg update -y && pkg upgrade -y
+pkg install proot-distro python git -y
 
-# Install additional development packages
-echo "Installing additional development packages..."
-pkg install php ruby go rust clang make cmake openssh -y
+# === Part 2: Setup Ubuntu Sandbox ===
+DISTRO_NAME="ubuntu-tworkers"
+if proot-distro list | grep -q "$DISTRO_NAME"; then
+    echo "[2/4] Ubuntu sandbox ('$DISTRO_NAME') already exists. Skipping installation."
+else
+    echo "[2/4] Installing Ubuntu sandbox ('$DISTRO_NAME')... This may take a few minutes."
+    proot-distro install --distro-name "$DISTRO_NAME" ubuntu-22.04
+fi
 
-# Setup storage access
-echo "Setting up storage access..."
-termux-setup-storage
+# === Part 3: Deploy Tworkers into the Sandbox ===
+echo "[3/4] Deploying Tworkers agent and web UI into the Ubuntu sandbox..."
 
-# Install Python dependencies
-echo "Installing Python dependencies..."
-pip install -r requirements.txt
+# A login shell to run commands inside the distro
+PD_LOGIN="proot-distro login $DISTRO_NAME --shared-tmp"
 
-# Create the tworker shortcut
-echo "Creating the 'tworker' shortcut..."
-echo "python3 \$HOME/Tworkers/agent/agent.py \"\$@\"" > \$PREFIX/bin/tworker
-chmod +x \$PREFIX/bin/tworker
+# Update Ubuntu and install dependencies inside the proot
+$PD_LOGIN -- bash -c "apt-get update && apt-get install -y python3-pip git"
 
-echo "Tworkers setup complete!"
-echo "You can now run the agent by typing 'tworker' in your terminal."
+# Copy the Tworkers project directory into the sandbox's /root
+# Note: This copies the current state of the folder.
+$PD_LOGIN -- bash -c "rm -rf /root/Tworkers && mkdir -p /root/Tworkers"
+cp -r ./* $($PD_LOGIN -- bash -c "echo /root/Tworkers")
+
+# Install all Python requirements for agent AND webapp
+$PD_LOGIN -- bash -c "cd /root/Tworkers && pip3 install -r requirements.txt"
+
+# === Part 4: Final Instructions ===
+echo ""
+echo "✅ Tworkers Agent setup is complete!"
+echo "--------------------------------------------------"
+echo "To run the agent:"
+echo "1. Login to the sandbox:"
+echo "   proot-distro login $DISTRO_NAME"
+echo ""
+echo "2. Navigate to the agent directory:"
+echo "   cd /root/Tworkers"
+echo ""
+echo "3. Add your Gemini API key:"
+echo "   nano config.json"
+echo ""
+echo "4. Start the web server:"
+echo "   python3 webapp/server.py"
+echo ""
+echo "Then, open http://localhost:5000 in your browser."
+echo "--------------------------------------------------"

@@ -1,126 +1,66 @@
-# Tworkers: Your AI-Powered Termux Assistant
+# Tworkers 🤖 (Termux Edition)
 
-<p align="center">
-  <img src="assets/hello.gif" alt="Tworkers Greeting" width="300"/>
-</p>
+An AI agent powered by Google's ADK, designed to run securely in a sandboxed Ubuntu environment on Termux.
 
-<p align="center">
-  <strong>An intelligent agent for Termux that generates scripts, builds websites, and automates tasks, all powered by Google's ADK and Gemini.</strong>
-</p>
+### ✨ Features
 
-<p align="center">
-  <a href="https://github.com/likhonsexikh/Tworkers/stargazers"><img src="https://img.shields.io/github/stars/likhonsexikh/Tworkers?style=social" alt="GitHub Stars"></a>
-  <a href="https://github.com/likhonsexikh/Tworkers/network/members"><img src="https://img.shields.io/github/forks/likhonsexikh/Tworkers?style=social" alt="GitHub Forks"></a>
-  <a href="https://t.me/likhonsheikh"><img src="https://img.shields.io/badge/Telegram-Likhon%20Sheikh-blue?logo=telegram" alt="Telegram"></a>
-  <a href="https://x.com/likhonymous"><img src="https://img.shields.io/badge/X-Likhonymous-black?logo=x" alt="X"></a>
-</p>
+-   **Termux-Native:** No Docker required. Uses `proot-distro` for a userland sandbox.
+-   **Security First:** All file and command operations are sandboxed within a guest Ubuntu OS and controlled by a secure API layer.
+-   **API-Driven Tools:** The AI agent cannot directly access the system. It uses hardened API endpoints for all actions, preventing unsafe behavior.
+-   **Web Interface:** A clean, browser-based UI to interact with the agent and view the sandboxed file system.
 
 ---
 
-**Tworkers** is a multi-agent AI system designed to run directly on your Android device via [Termux](https://termux.dev/en/). It leverages the Agent Development Kit (ADK) to provide a powerful, extensible, and intelligent assistant that can understand your needs and take action.
+### 🚀 Installation in Termux
 
-## ✨ Features
+This script will automatically set up a sandboxed Ubuntu environment and install the Tworkers agent inside it.
 
-*   **🤖 Multi-Agent Orchestration**: A `RootAgent` delegates tasks to specialized agents for script generation, website creation, and notifications.
-*   **🐚 Script Generation**: Automatically create safe and effective shell scripts for Termux.
-*   **🌐 Website Generation**: Generate static HTML/CSS/JS websites from a simple description.
-*   **🔔 Smart Notifications**: Send updates to Telegram or X.
-*   **🧠 Powered by Gemini**: Utilizes Google's state-of-the-art Gemini models for reasoning and generation.
-*   **📦 Local-First**: Runs entirely on your device, but is Cloud-ready for future scaling.
-*   **🔧 Extensible**: Easily add new tools, agents, and prompts to expand its capabilities.
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-*   [Termux](https://f-droid.org/en/packages/com.termux/) installed on your Android device.
-
-### Installation
-
-1.  **Clone the repository:**
+1.  **Clone the repository in Termux:**
     ```bash
+    pkg install git -y
     git clone https://github.com/likhonsexikh/Tworkers.git
     cd Tworkers
     ```
 
 2.  **Run the setup script:**
-    This will install all necessary packages, dependencies, and set up the environment.
+    This will install all dependencies, create the Ubuntu sandbox, and deploy the agent.
     ```bash
-    bash setup.sh
+    chmod +x setup.sh
+    ./setup.sh
     ```
 
-3.  **Configure API Keys:**
-    Edit the `config.json` file to add your API keys for Gemini, Telegram, and X.
+---
+
+### ⚙️ How to Run
+
+After the setup is complete, follow these steps:
+
+1.  **Login to the Sandbox:**
+    ```bash
+    proot-distro login ubuntu-tworkers
+    ```
+
+2.  **Navigate to the Agent Directory:**
+    ```bash
+    cd /root/Tworkers
+    ```
+
+3.  **Add Your API Key:**
+    Open `config.json` with a text editor and add your Gemini API key.
     ```bash
     nano config.json
     ```
 
-### Usage
-
-You can run Tworkers in two modes:
-
-1.  **Command-Line Mode:**
-    Pass your request directly as an argument.
+4.  **Start the Web Server:**
     ```bash
-    tworker "create a script to update my packages"
+    python3 webapp/server.py
     ```
 
-2.  **Interactive Mode:**
-    Start the agent without arguments to enter an interactive shell.
-    ```bash
-    tworker
-    ```
-    Then, type your requests at the `Tworkers>` prompt.
-
-### 🚀 Web UI (New!)
-
-Tworkers now includes a web-based terminal interface powered by Xterm.js.
-
-1.  **Install Web Dependencies:**
-    The main `setup.sh` script should handle this, but if you've already run it, make sure the new web dependencies are installed:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-2.  **Run the Web Server:**
-    ```bash
-    python Tworkers/webapp/server.py
-    ```
-
-3.  **Access the Terminal:**
-    Open your web browser and navigate to `http://127.0.0.1:5000`. If you are running this in Termux, you can access it from a browser on the same WiFi network by using your phone's local IP address (e.g., `http://192.168.1.10:5000`).
-
-## 🏛️ Architecture
-
-<p align="center">
-  <img src="assets/octodex1.png" alt="Tworkers Architecture" width="400"/>
-</p>
-
-Tworkers uses a hierarchical agent structure:
-
-*   **RootAgent**: The central orchestrator that analyzes user requests.
-*   **ScriptAgent**: Generates shell scripts.
-*   **WebsiteAgent**: Builds static websites.
-*   **NotificationAgent**: Handles all outgoing notifications.
-
-For more details, please see the [Architecture documentation](docs/architecture.md).
-
-## 📚 Developer Resources
-
-To extend Tworkers or integrate it with other systems, refer to the official **Agent Development Kit (ADK)** documentation.
-
-*   **[ADK API Reference](docs/api_reference.md)**: A centralized hub for Python, Java, CLI, and REST API documentation.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read our [contributing guidelines](docs/contributing.md) to get started.
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+5.  **Access the Interface:**
+    Open your phone's web browser and navigate to `http://localhost:5000`.
 
 ---
 
-<p align="center">
-  <img src="assets/octodex2.png" alt="Octodex" width="200"/>
-</p>
+### 🏛️ Architecture
+
+Tworkers runs a Flask web server inside a `proot-distro` Ubuntu instance. The ADK-based AI agent is loaded by the server. When a user sends a prompt through the web UI, the agent reasons and decides which tools to use. These "tools" are secure Python functions that perform the requested actions strictly within the sandboxed environment.
