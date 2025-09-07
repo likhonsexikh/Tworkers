@@ -1,0 +1,46 @@
+/* Apply styles to the terminal container */
+#terminal {
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    box-sizing: border-box; /* Ensures padding doesn't add to the width/height */
+}
+
+/* The actual viewport where text is rendered */
+.xterm-viewport {
+    background-color: #0c0c0c !important; /* Force a dark background */
+    color: #00ff41;
+    text-shadow: 0 0 5px #00ff41, 0 0 10px rgba(0, 255, 65, 0.5); /* Green glow effect */
+}
+
+/* Add a subtle scanline overlay and vignette effect */
+body::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    /* Scanline effect */
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 3px, 4px 100%;
+    pointer-events: none; /* Allows clicks to go through the overlay */
+
+    /* Vignette effect (darker corners) */
+    box-shadow: inset 0 0 150px rgba(0,0,0,0.75);
+}
+
+/* Optional: Add a slight curvature effect to the terminal */
+.terminal {
+  border-radius: 20px;
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0%   { opacity:0.8; }
+  50%  { opacity:1; }
+  100% { opacity:0.8; }
+}

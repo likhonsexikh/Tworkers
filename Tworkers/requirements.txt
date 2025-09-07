@@ -1,0 +1,6 @@
+google-generativeai
+google-adk
+Flask
+Flask-SocketIO
+python-engineio
+python-socketio

@@ -1,0 +1,14 @@
+{
+  "prompts": [
+    {
+      "name": "portfolio",
+      "description": "A simple personal portfolio website.",
+      "task": "Create a single-page personal portfolio with a header, a short bio section, a list of projects, and a footer with social media links."
+    },
+    {
+      "name": "landing_page",
+      "description": "A landing page for a new mobile app.",
+      "task": "Design a modern landing page for a fictional mobile app called 'TaskMaster'. It should have a hero section with a screenshot, a features section, and a call-to-action button."
+    }
+  ]
+}
