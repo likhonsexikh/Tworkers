@@ -1,0 +1,12 @@
+{
+  "prompts": [
+    {
+      "name": "task_complete",
+      "template": "✅ Task '{task_name}' completed successfully. Results saved to {output_path}."
+    },
+    {
+      "name": "error_occurred",
+      "template": "❌ An error occurred while running task '{task_name}'. Check the error log for details: {log_path}."
+    }
+  ]
+}
